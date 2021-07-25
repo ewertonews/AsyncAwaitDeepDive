@@ -74,7 +74,7 @@ namespace AsyncAwaitDeepDive
             resultsWindow.Text = "Downloading...";
             Stopwatch? watch = Stopwatch.StartNew();
 
-            var results = await DemoMethods.RunDownloadParalleAsync();
+            var results = await DemoMethods.RunDownloadParallelAsyncV2();
             PrintResults(results);
 
             watch.Stop();

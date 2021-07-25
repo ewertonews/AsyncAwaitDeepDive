@@ -60,6 +60,24 @@ namespace AsyncAwaitDeepDive
             return new List<WebSiteDataModel>(results);
         }
 
+        internal static async Task<List<WebSiteDataModel>> RunDownloadParallelAsyncV2()
+        {
+            List<string>? websites = WebsitesToDownload();
+            List<WebSiteDataModel> output = new();
+
+            await Task.Run(() =>
+            {
+                Parallel.ForEach(websites, website =>
+                {
+                    WebSiteDataModel result = DownloadWebsite(website);
+                    output.Add(result);
+                });
+            });
+            
+
+            return output;
+        }
+
         internal static List<WebSiteDataModel> RunDownloadParallelSync()
         {
             List<string>? websites = WebsitesToDownload();
