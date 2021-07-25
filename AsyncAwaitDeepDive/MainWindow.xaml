@@ -1,0 +1,20 @@
+﻿<Window x:Class="AsyncAwaitDeepDive.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AsyncAwaitDeepDive"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="800" Width="900">
+    <Grid>
+        <Label FontSize="20px" Content="Simple Async Demo App" HorizontalAlignment="Left" Height="43" Margin="18,10,0,0" VerticalAlignment="Top" Width="536"/>
+
+        <Button FontSize="15px" Content="Normal Execute" HorizontalAlignment="Center" Margin="0,58,0,0" VerticalAlignment="Top" Width="852" Height="42" Click="NormalExecute_Click"/>
+        <Button FontSize="15px" Content="Async Execute" HorizontalAlignment="Center" Margin="0,116,0,0" VerticalAlignment="Top" Width="852" Height="42" Click="AsyncExecute_Click"/>
+        <Button FontSize="15px" Content="Parallel Async Execute" HorizontalAlignment="Center" Margin="0,174,0,0" VerticalAlignment="Top" Width="852" Height="42" Click="ParallelExecute_Click"/>
+        <Button FontSize="15px" Content="Cancel Operation" HorizontalAlignment="Center" Margin="0,233,0,0" VerticalAlignment="Top" Width="852" Height="42" Click="CancelOperation_Click"/>
+        <ProgressBar HorizontalAlignment="Center" Height="23" Margin="0,292,0,0" VerticalAlignment="Top" Width="852" Name="downloadProgress" />
+        <TextBox Name="resultsWindow" FontSize="13px"  HorizontalAlignment="Center" Margin="0,334,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="852" Height="397"/>
+
+    </Grid>
+</Window>
