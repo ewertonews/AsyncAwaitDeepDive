@@ -39,7 +39,7 @@ namespace AsyncAwaitDeepDive
             Stopwatch? watch = Stopwatch.StartNew();            
 
             var results = await DemoMethods.RunDownloadAsync(progress);
-            PrintResults(results);
+            //PrintResults(results);
 
             watch.Stop();
             long elapsedMs = watch.ElapsedMilliseconds;
