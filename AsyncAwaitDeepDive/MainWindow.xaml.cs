@@ -27,7 +27,8 @@ namespace AsyncAwaitDeepDive
             resultsWindow.Text = "Downloading...";
             Stopwatch? watch = Stopwatch.StartNew();
 
-            var results = DemoMethods.RunDownloadSync();
+            //var results = DemoMethods.RunDownloadSync();
+            var results = DemoMethods.RunDownloadParallelSync();
             PrintResults(results);
 
             watch.Stop();
