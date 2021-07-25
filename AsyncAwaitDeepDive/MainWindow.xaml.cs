@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Windows;
 
 namespace AsyncAwaitDeepDive
@@ -10,6 +11,12 @@ namespace AsyncAwaitDeepDive
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// Controls weather or not we cancel any method execution.
+        /// Signals to a cancelationToken that it should be cancelled
+        /// </summary>
+        private readonly CancellationTokenSource cts = new();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -36,10 +43,17 @@ namespace AsyncAwaitDeepDive
             Progress<ProgressReportModel> progress = new();
             progress.ProgressChanged += ReportProgress;
 
-            Stopwatch? watch = Stopwatch.StartNew();            
+            Stopwatch? watch = Stopwatch.StartNew();
 
-            var results = await DemoMethods.RunDownloadAsync(progress);
-            //PrintResults(results);
+            try
+            {
+                var results = await DemoMethods.RunDownloadAsync(progress, cts.Token);
+                //PrintResults(results);
+            }
+            catch (OperationCanceledException ex)
+            {
+                resultsWindow.Text += $"{ex.Message} { Environment.NewLine }";
+            }
 
             watch.Stop();
             long elapsedMs = watch.ElapsedMilliseconds;
@@ -68,9 +82,9 @@ namespace AsyncAwaitDeepDive
             resultsWindow.Text += $"Total execution time: {elapsedMs}";
         }
 
-        private async void CancelOperation_Click(object sender, RoutedEventArgs e)
+        private void CancelOperation_Click(object sender, RoutedEventArgs e)
         {
-
+            cts.Cancel();
         }
 
         private void PrintResults(List<WebSiteDataModel> results)

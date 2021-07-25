@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AsyncAwaitDeepDive
@@ -23,7 +24,9 @@ namespace AsyncAwaitDeepDive
         }
 
 
-        internal static async Task<List<WebSiteDataModel>> RunDownloadAsync(IProgress<ProgressReportModel> progress)
+        internal static async Task<List<WebSiteDataModel>> RunDownloadAsync(
+            IProgress<ProgressReportModel> progress, 
+            CancellationToken cancellationToken)
         {
             List<string>? websites = WebsitesToDownload();
             List<WebSiteDataModel> output = new();
@@ -33,7 +36,7 @@ namespace AsyncAwaitDeepDive
             {
                 WebSiteDataModel results = await DownloadWebsiteAsync(site);
                 output.Add(results);
-
+                cancellationToken.ThrowIfCancellationRequested(); // <====
                 report.SitesDownloaded = output;
                 report.PercentageComplete = output.Count * 100 / websites.Count;
                 progress.Report(report);
@@ -51,9 +54,24 @@ namespace AsyncAwaitDeepDive
             {
                 tasks.Add(DownloadWebsiteAsync(site));
             }
+
             WebSiteDataModel[]? results = await Task.WhenAll(tasks);
 
             return new List<WebSiteDataModel>(results);
+        }
+
+        internal static List<WebSiteDataModel> RunDownloadParallelSync()
+        {
+            List<string>? websites = WebsitesToDownload();
+            List<WebSiteDataModel> output = new();
+
+            Parallel.ForEach(websites, website =>
+            {
+                WebSiteDataModel result = DownloadWebsite(website);
+                output.Add(result);
+            });
+
+            return output;
         }
 
         private static WebSiteDataModel DownloadWebsite(string websiteUrl)
